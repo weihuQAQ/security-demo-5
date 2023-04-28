@@ -1,6 +1,6 @@
 package com.hw.securitydemo5.controller;
 
-import com.hw.securitydemo5.domain.ResponseResult;
+import com.hw.securitydemo5.entry.ResponseResult;
 import com.hw.securitydemo5.domain.User;
 import com.hw.securitydemo5.service.AuthService;
 import jakarta.annotation.Resource;
@@ -19,5 +19,10 @@ public class AuthController {
         ResponseResult<Map<String, String>> res = authService.login(user);
         System.out.println(res);
         return res;
+    }
+
+    @PostMapping("/register")
+    private ResponseResult<?> register(@RequestBody User user) {
+        return authService.register(user);
     }
 }

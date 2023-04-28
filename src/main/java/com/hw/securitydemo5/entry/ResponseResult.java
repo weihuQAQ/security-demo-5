@@ -1,4 +1,4 @@
-package com.hw.securitydemo5.domain;
+package com.hw.securitydemo5.entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

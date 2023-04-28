@@ -3,6 +3,7 @@ package com.hw.securitydemo5;
 import com.hw.securitydemo5.domain.User;
 import com.hw.securitydemo5.repository.UserRepository;
 import com.hw.securitydemo5.utils.JwtUtil;
+import com.hw.securitydemo5.utils.RedisCache;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,8 @@ class SecurityDemo5ApplicationTests {
     private PasswordEncoder passwordEncoder;
     @Resource
     private UserRepository userRepository;
+    @Resource
+    private RedisCache redisCache;
 
     @Test
     void testUserRepository() {
@@ -49,5 +52,15 @@ class SecurityDemo5ApplicationTests {
     void testParseJwtUtil() throws Exception {
         String jwt = JwtUtil.createJWT("123");
         System.out.println(JwtUtil.parseJWT(jwt).getSubject());
+    }
+
+    @Test
+    void findOne() throws Exception {
+        System.out.println(userRepository.findByUsername(""));
+    }
+
+    @Test
+    void redisTest() {
+        System.out.println((Object) redisCache.getCacheObject("login:245f1b7d-ef5a-4f1e-ab17-68e1e84b6ab6"));
     }
 }
