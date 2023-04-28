@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+
 @SpringBootTest
 class SecurityDemo5ApplicationTests {
 
@@ -18,6 +20,21 @@ class SecurityDemo5ApplicationTests {
     private UserRepository userRepository;
     @Resource
     private RedisCache redisCache;
+
+    @Test
+    void createUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        for (int i = 1; i <= 4; i++) {
+            User user = User.builder()
+                    .username("hw" + i)
+                    .password(passwordEncoder.encode("1234"))
+                    .phone("1880000000" + i)
+                    .email("hw" + i + "@qq.com")
+                    .build();
+            users.add(user);
+        }
+        userRepository.saveAll(users);
+    }
 
     @Test
     void testUserRepository() {

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/test")
 public class TestController {
@@ -15,6 +17,8 @@ public class TestController {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getDetails());
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-        return new ResponseResult<>(200, "test msg", "test data");
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("content", "已认证");
+        return new ResponseResult<>(200, "", map);
     }
 }

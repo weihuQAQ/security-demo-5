@@ -1,4 +1,4 @@
-###
+### Register
 POST http://localhost:8080/auth/register
 Content-Type: application/json
 
@@ -10,18 +10,18 @@ Content-Type: application/json
 }
 
 
-###
+### Login
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "hw3",
+  "username": "hw1",
   "password": "1234"
 }
 
 > {% client.global.set("auth_token", response.body.data.token); %}
 
-###
+### Test auth
 GET http://localhost:8080/test/hello
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
