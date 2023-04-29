@@ -25,4 +25,9 @@ public class AuthController {
     private ResponseResult<?> register(@RequestBody User user) {
         return authService.register(user);
     }
+
+    @PostMapping("/logout")
+    private ResponseResult<?> logout() {
+        return authService.logout();
+    }
 }

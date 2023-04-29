@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**")
-                .anonymous()
+                .permitAll()
                 .anyRequest()
                 .authenticated();
 

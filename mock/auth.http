@@ -25,3 +25,8 @@ Content-Type: application/json
 GET http://localhost:8080/test/hello
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
+
+### Logout
+POST http://localhost:8080/auth/logout
+Content-Type:application/json
+Authorization: Bearer {{auth_token}}

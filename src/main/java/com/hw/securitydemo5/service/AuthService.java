@@ -10,6 +10,7 @@ import jakarta.annotation.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -72,5 +73,15 @@ public class AuthService {
                 .build();
 
         return new ResponseResult<>(200, "注册成功", registerResponse);
+    }
+
+    public ResponseResult<?> logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        String id = user.getId();
+
+        redisCache.deleteObject("login:"+id);
+
+        return new ResponseResult<>(200, "ok");
     }
 }
