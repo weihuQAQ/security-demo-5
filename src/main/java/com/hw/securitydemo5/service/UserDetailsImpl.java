@@ -1,6 +1,5 @@
 package com.hw.securitydemo5.service;
 
-import com.hw.securitydemo5.domain.User;
 import com.hw.securitydemo5.repository.UserRepository;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
