@@ -19,10 +19,16 @@ public class UserController {
         return new ResponseResult<>(200, "", userService.getCurrentUserInfo());
     }
 
-    @GetMapping("/testAuth")
+    @GetMapping("/testAuthModify")
     @PreAuthorize("hasAuthority('system:book:modify')")
-    public ResponseResult<?> testAdmin() {
-        return new ResponseResult<>(200, "has auth");
+    public ResponseResult<?> testAuthModify() {
+        return new ResponseResult<>(200, "has auth system:book:modify");
+    }
+
+    @GetMapping("/testAuthGet")
+    @PreAuthorize("hasAuthority('system:book:get')")
+    public ResponseResult<?> testAuthGet() {
+        return new ResponseResult<>(200, "has auth system:book:get");
     }
 
 }

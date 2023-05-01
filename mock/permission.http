@@ -21,6 +21,11 @@ Content-Type:application/json
 Authorization: Bearer {{auth_token}}
 
 ### Test has auth
-GET http://localhost:8080/user/testAuth
+GET http://localhost:8080/user/testAuthModify
+Content-Type:application/json
+Authorization: Bearer {{auth_token}}
+
+### Test has auth
+GET http://localhost:8080/user/testAuthGet
 Content-Type:application/json
 Authorization: Bearer {{auth_token}}
