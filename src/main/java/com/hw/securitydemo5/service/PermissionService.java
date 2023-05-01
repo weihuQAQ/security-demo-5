@@ -26,7 +26,7 @@ public class PermissionService {
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
-    public List<Permission> findPermission() {
+    public List<Permission> findPermissions() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository

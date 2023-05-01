@@ -17,8 +17,8 @@ public class PermissionController {
 
     @GetMapping("/all")
     public ResponseResult<?> getPermissions(){
-        Map<String, List<Permission>> permissions = Map.of("permissions", permissionService.findPermission());
-        return new ResponseResult<>(200, "", permissions);
+        List<Permission> permissions = permissionService.findPermissions();
+        return new ResponseResult<>(200, "", Map.of("permissions", permissions));
     }
 
     @PostMapping("/save")

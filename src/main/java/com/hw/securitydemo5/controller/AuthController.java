@@ -6,8 +6,6 @@ import com.hw.securitydemo5.service.AuthService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -16,9 +14,7 @@ public class AuthController {
 
     @PostMapping("/login")
     private ResponseResult<?> login(@RequestBody User user) {
-        ResponseResult<Map<String, String>> res = authService.login(user);
-        System.out.println(res);
-        return res;
+        return authService.login(user);
     }
 
     @PostMapping("/register")
