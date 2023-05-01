@@ -3,7 +3,7 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "hw-admin&user",
+  "username": "hw-user",
   "password": "1234"
 }
 
@@ -20,12 +20,12 @@ GET http://localhost:8080/user/info
 Content-Type:application/json
 Authorization: Bearer {{auth_token}}
 
-### Test has auth
+### Test has AuthModify
 GET http://localhost:8080/user/testAuthModify
 Content-Type:application/json
 Authorization: Bearer {{auth_token}}
 
-### Test has auth
+### Test has AuthGet
 GET http://localhost:8080/user/testAuthGet
 Content-Type:application/json
 Authorization: Bearer {{auth_token}}

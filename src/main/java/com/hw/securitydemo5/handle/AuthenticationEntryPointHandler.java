@@ -12,6 +12,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint {
@@ -20,7 +21,8 @@ public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        String value = objectMapper.writeValueAsString(new ResponseResult<>(HttpStatus.UNAUTHORIZED.value(), "认证失败"));
+        Map<String, String> map = Map.of("message", authException.getMessage());
+        String value = objectMapper.writeValueAsString(new ResponseResult<>(HttpStatus.UNAUTHORIZED.value(), "Authentication Failed", map));
         WebUtils.renderString(response, value);
     }
 }

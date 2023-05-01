@@ -12,6 +12,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
@@ -20,7 +21,8 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        String value = objectMapper.writeValueAsString(new ResponseResult<>(HttpStatus.FORBIDDEN.value(), "授权失败"));
+        Map<String, String> map = Map.of("message", accessDeniedException.getMessage());
+        String value = objectMapper.writeValueAsString(new ResponseResult<>(HttpStatus.FORBIDDEN.value(), "Access Denied", map));
         WebUtils.renderString(response, value);
     }
 }
