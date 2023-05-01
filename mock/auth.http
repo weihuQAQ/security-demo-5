@@ -15,7 +15,7 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "hw1",
+  "username": "hw-admin&user",
   "password": "1234"
 }
 
