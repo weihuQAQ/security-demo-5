@@ -10,6 +10,7 @@ import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
@@ -26,6 +27,8 @@ class SecurityDemo5ApplicationTests {
     private PermissionRepository permissionRepository;
     @Resource
     private RoleRepository roleRepository;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Test
     void clearData() {
@@ -100,6 +103,11 @@ class SecurityDemo5ApplicationTests {
         Set<Role> roles = user.getRoles();
 
         System.out.println(roles);
+    }
+
+    @Test
+    void queryRedis() {
+        System.out.println(redisTemplate.opsForValue().get("login:29b61e2f-9a10-4ad3-834d-5a8ccaf5d756"));
     }
 
 }
