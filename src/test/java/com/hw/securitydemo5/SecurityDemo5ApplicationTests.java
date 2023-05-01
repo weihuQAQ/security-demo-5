@@ -1,15 +1,19 @@
 package com.hw.securitydemo5;
 
+import com.hw.securitydemo5.domain.Permission;
+import com.hw.securitydemo5.domain.Role;
 import com.hw.securitydemo5.domain.User;
+import com.hw.securitydemo5.repository.PermissionRepository;
+import com.hw.securitydemo5.repository.RoleRepository;
 import com.hw.securitydemo5.repository.UserRepository;
-import com.hw.securitydemo5.utils.JwtUtil;
-import com.hw.securitydemo5.utils.RedisCache;
 import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
+import java.util.*;
+import java.util.stream.Stream;
 
 @SpringBootTest
 class SecurityDemo5ApplicationTests {
@@ -19,65 +23,83 @@ class SecurityDemo5ApplicationTests {
     @Resource
     private UserRepository userRepository;
     @Resource
-    private RedisCache redisCache;
+    private PermissionRepository permissionRepository;
+    @Resource
+    private RoleRepository roleRepository;
 
     @Test
-    void createUsers() {
-        ArrayList<User> users = new ArrayList<>();
-        for (int i = 1; i <= 4; i++) {
-            User user = User.builder()
-                    .username("hw" + i)
-                    .password(passwordEncoder.encode("1234"))
-                    .phone("1880000000" + i)
-                    .email("hw" + i + "@qq.com")
-                    .build();
-            users.add(user);
-        }
-        userRepository.saveAll(users);
+    void clearData() {
+        userRepository.deleteAll();
+        permissionRepository.deleteAll();
+        roleRepository.deleteAll();
     }
 
     @Test
-    void testUserRepository() {
-        System.out.println(userRepository.findByUsername("hw"));
-    }
-
-    @Test
-    void testEncodePassword() {
-        System.out.println(passwordEncoder.encode("1234"));
-//        System.out.println(userRepository.findByUsername("hw"));
-    }
-
-    @Test
-    void testSaveUser() {
-        String password = passwordEncoder.encode("1234");
-        userRepository.save(User.builder()
-                .username("hw3")
-                .email("hw3@qq.com")
-                .password(password)
-                .phone("17781579730")
-                .build()
+    void saveSystem() {
+        List<Role> roles = roleRepository.saveAll(
+                Stream.of("superAdmin", "admin", "user").map(
+                                p -> Role.builder().role(p).roleName(p).build()
+                        )
+                        .toList()
         );
-//        System.out.println(userRepository.findByUsername("hw"));
+
+        List<Permission> permissions = Stream.of(
+                        "system:book:add", "system:book:remove", "system:book:get", "system:book:modify",
+                        "system:user:add", "system:user:remove", "system:user:get", "system:user:modify",
+                        "system:role:add", "system:role:remove", "system:role:get", "system:role:modify",
+                        "system:permission:add", "system:permission:remove", "system:permission:get", "system:permission:modify"
+                )
+                .map(p -> {
+                    Permission permission = Permission
+                            .builder()
+                            .permission(p)
+                            .permissionName(p.replaceAll(":", "-"))
+                            .roles(new HashSet<>())
+                            .build();
+
+                    if (p.contains("book:get")) permission.getRoles().add(roles.get(2));
+                    if (p.contains("book")) permission.getRoles().add(roles.get(1));
+                    permission.getRoles().add(roles.get(0));
+
+                    return permission;
+                })
+                .toList();
+
+        List<User> users = Stream.of("hw-admin&user", "hw-superAdmin&admin&user", "hw-user", "hw2-user")
+                .map(u -> {
+                            List<String> strRoles = Arrays.asList(u.split("-")[1].split("&"));
+
+                            User user = User.builder()
+                                    .username(u)
+                                    .password(passwordEncoder.encode("1234"))
+                                    .phone("1880000000" + u)
+                                    .email(u + "@qq.com")
+                                    .roles(new HashSet<>())
+                                    .build();
+
+                            List<Role> roleList = roles.stream().filter(i -> strRoles.contains(i.getRole())).toList();
+
+                            user.getRoles().addAll(roleList);
+
+                            return user;
+                        }
+                ).toList();
+
+        roleRepository.saveAll(roles);
+        userRepository.saveAll(users);
+        permissionRepository.saveAll(permissions);
     }
 
     @Test
-    void testJwtUtil() {
-        System.out.println(JwtUtil.createJWT("123"));
+    @Transactional
+    void queryItems() throws Exception {
+        User user = userRepository.findByUsername("hw-admin&user").orElseThrow(() -> new Exception(""));
+
+        System.out.println(user);
+
+        Set<Role> roles = user.getRoles();
+
+        System.out.println(roles);
     }
 
-    @Test
-    void testParseJwtUtil() throws Exception {
-        String jwt = JwtUtil.createJWT("123");
-        System.out.println(JwtUtil.parseJWT(jwt).getSubject());
-    }
-
-    @Test
-    void findOne() throws Exception {
-        System.out.println(userRepository.findByUsername(""));
-    }
-
-    @Test
-    void redisTest() {
-        System.out.println((Object) redisCache.getCacheObject("login:245f1b7d-ef5a-4f1e-ab17-68e1e84b6ab6"));
-    }
 }

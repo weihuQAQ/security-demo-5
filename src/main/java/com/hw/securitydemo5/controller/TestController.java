@@ -21,4 +21,5 @@ public class TestController {
         map.put("content", "已认证");
         return new ResponseResult<>(200, "", map);
     }
+
 }

@@ -1,0 +1,16 @@
+### Login
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "hw-admin",
+  "password": "1234"
+}
+
+> {% client.global.set("auth_token", response.body.data.token); %}
+
+
+### Get Permissions
+GET http://localhost:8080/permission/all
+Content-Type:application/json
+Authorization: Bearer {{auth_token}}
