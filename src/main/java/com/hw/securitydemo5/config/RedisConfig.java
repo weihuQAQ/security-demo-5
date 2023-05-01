@@ -21,10 +21,10 @@ public class RedisConfig {
     }
 
     @Bean
-    public <T> RedisTemplate<String, T> getRedisTemplate(ObjectMapper objectMapper, RedisConnectionFactory redisConnectionFactory){
-        RedisTemplate<String, T> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> getRedisTemplate(RedisConnectionFactory redisConnectionFactory){
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
-        redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
+        redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         return redisTemplate;

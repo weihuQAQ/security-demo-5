@@ -1,6 +1,6 @@
 package com.hw.securitydemo5.filter;
 
-import com.hw.securitydemo5.domain.User;
+import com.hw.securitydemo5.domain.UserDetailsImpl;
 import com.hw.securitydemo5.utils.JwtUtil;
 import com.hw.securitydemo5.utils.RedisCache;
 import jakarta.annotation.Resource;
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // get redis user
-        User user = redisCache.getCacheObject("login:" + uid);
+        UserDetailsImpl user = redisCache.getCacheObject("login:" + uid);
 
         if (Objects.isNull(user)) {
             throw new RuntimeException("用户未登录");
@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(
                         user,
                         null,
-                        null
+                        user.getAuthorities()
                 )
         );
 

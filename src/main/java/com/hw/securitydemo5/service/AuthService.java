@@ -1,5 +1,6 @@
 package com.hw.securitydemo5.service;
 
+import com.hw.securitydemo5.domain.UserDetailsImpl;
 import com.hw.securitydemo5.entry.ResponseResult;
 import com.hw.securitydemo5.domain.User;
 import com.hw.securitydemo5.entry.RegisterResponse;
@@ -43,13 +44,14 @@ public class AuthService {
         }
 
         // 如果认证通过了，使用userid生成一个jwt, jwt存入ResponseResult返回
-        User loginUser = (User) authenticate.getPrincipal();
-        String userid = loginUser.getId();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
+        String userid = userDetails.getUser().getId();
+
         Map<String, String> map = new HashMap<>();
         map.put("token", JwtUtil.createJWT(userid));
 
         // 把完整的用户信息存入redis  userid作为key
-        redisCache.setCacheObject("login:" + userid, loginUser);
+        redisCache.setCacheObject("login:" + userid, userDetails);
 
         return new ResponseResult<>(200, "登录成功", map);
     }
@@ -77,8 +79,8 @@ public class AuthService {
 
     public ResponseResult<?> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        String id = user.getId();
+        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+        String id = user.getUser().getId();
 
         redisCache.deleteObject("login:"+id);
 

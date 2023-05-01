@@ -3,6 +3,7 @@ package com.hw.securitydemo5.service;
 import com.hw.securitydemo5.domain.Permission;
 import com.hw.securitydemo5.domain.Role;
 import com.hw.securitydemo5.domain.User;
+import com.hw.securitydemo5.domain.UserDetailsImpl;
 import com.hw.securitydemo5.repository.PermissionRepository;
 import com.hw.securitydemo5.repository.UserRepository;
 import jakarta.annotation.Resource;
@@ -10,9 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
+
+import static com.hw.securitydemo5.function.Helper.distinctByKey;
 
 @Service
 public class PermissionService {
@@ -21,13 +21,8 @@ public class PermissionService {
     @Resource
     private PermissionRepository permissionRepository;
 
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Map<Object, Object> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
-    }
-
     public List<Permission> findPermissions() {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetailsImpl currentUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository
                 .findByUsername(currentUser.getUsername())
