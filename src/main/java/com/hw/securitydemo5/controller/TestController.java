@@ -18,7 +18,7 @@ public class TestController {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getDetails());
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         HashMap<Object, Object> map = new HashMap<>();
-        map.put("content", "已认证");
+        map.put("content", "authenticated");
         return new ResponseResult<>(200, "", map);
     }
 

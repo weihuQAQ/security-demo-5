@@ -36,14 +36,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             uid = JwtUtil.parseJWT(token).getSubject();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Token is invalid");
         }
 
         // get redis user
         UserDetailsImpl user = redisCache.getCacheObject("login:" + uid);
 
         if (Objects.isNull(user)) {
-            throw new RuntimeException("用户未登录");
+            throw new RuntimeException("Please log in again");
         }
 
         // save context holder

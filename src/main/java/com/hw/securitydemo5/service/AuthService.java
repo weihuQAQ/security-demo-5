@@ -40,7 +40,7 @@ public class AuthService {
 
         // 如果认证没通过，给出对应的提示
         if (authenticate == null) {
-            throw new RuntimeException("登录失败");
+            throw new RuntimeException("Incorrect username or password");
         }
 
         // 如果认证通过了，使用userid生成一个jwt, jwt存入ResponseResult返回
@@ -53,7 +53,7 @@ public class AuthService {
         // 把完整的用户信息存入redis  userid作为key
         redisCache.setCacheObject("login:" + userid, userDetails);
 
-        return new ResponseResult<>(200, "登录成功", map);
+        return new ResponseResult<>(200, "success", map);
     }
 
     public ResponseResult<?> register(User registerUser) {
@@ -74,7 +74,7 @@ public class AuthService {
                 .roles(savedUser.getRoles())
                 .build();
 
-        return new ResponseResult<>(200, "注册成功", registerResponse);
+        return new ResponseResult<>(200, "success", registerResponse);
     }
 
     public ResponseResult<?> logout() {
@@ -84,6 +84,6 @@ public class AuthService {
 
         redisCache.deleteObject("login:"+id);
 
-        return new ResponseResult<>(200, "ok");
+        return new ResponseResult<>(200, "success");
     }
 }

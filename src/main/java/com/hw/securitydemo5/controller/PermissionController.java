@@ -15,7 +15,7 @@ public class PermissionController {
     @Resource
     private PermissionService permissionService;
 
-    @GetMapping("/all")
+    @GetMapping("/current")
     public ResponseResult<?> getPermissions(){
         List<Permission> permissions = permissionService.findPermissions();
         return new ResponseResult<>(200, "", Map.of("permissions", permissions));
